@@ -1,0 +1,22 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 0px;
+  }
+  
+  .button {
+    display: inline-flex;
+    padding: 10px 14px;
+    border: 1px solid black;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 20px;
+    color: black;
+    cursor: pointer;
+  }
+  
+  .button:hover {
+    background-color: gray;
+  }

@@ -1,35 +1,66 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState, useEffect } from "react";
+import Description from "./components/Description.jsx";
+import Options from "./components/Options.jsx";
+import Feedback from "./components/Feedback.jsx";
+import Notification from "./components/Notification.jsx";
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
+  const [feedback, setFeedback] = useState(() => {
+    const storedFeedback = localStorage.getItem("feedbackData");
+    if (!storedFeedback) {
+      return {
+        good: 0,
+        neutral: 0,
+        bad: 0,
+      };
+    }
+
+    return JSON.parse(storedFeedback);
+  });
+
+  useEffect(() => {
+    localStorage.setItem("feedbackData", JSON.stringify(feedback));
+  }, [feedback]);
+
+  const handleFeedbackUpdate = (feedbackType) => {
+    setFeedback((prevFeedback) => ({
+      ...prevFeedback,
+      [feedbackType]: prevFeedback[feedbackType] + 1,
+    }));
+  };
+
+  const handleFeedbackReset = () => {
+    setFeedback({
+      good: 0,
+      neutral: 0,
+      bad: 0,
+    });
+  };
+
+  const totalFeedbackCount = feedback.bad + feedback.neutral + feedback.good;
+  const positiveFeedbackPercentage = Math.round((feedback.good / totalFeedbackCount) * 100);
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+    <div className="mainview">
+      <Description />
+      <Options
+        options={feedback}
+        updateFeedback={handleFeedbackUpdate}
+        resetFeedback={handleFeedbackReset}
+        total={totalFeedbackCount}
+      />
+      {totalFeedbackCount === 0 ? (
+         <Notification />
+      ) : (
+        <Feedback
+          options={feedback}
+          totalQuantity={totalFeedbackCount}
+          positiveQuantity={positiveFeedbackPercentage}
+        />
+      )}
+    </div>
     </>
-  )
-}
-
-export default App
+  );
+};
+export default App;

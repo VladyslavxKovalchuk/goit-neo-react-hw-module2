@@ -1,0 +1,22 @@
+.heading {
+  text-align: left;
+}
+
+.title {
+  font-size: 44px;
+  margin-bottom: 32px;
+}
+
+.highlight {
+  font-size: 44px;
+  margin-bottom: 32px;
+  color: #98c379;
+}
+
+.text {
+  font-size: 24px;
+}
+.texthighlight{
+  font-size: 24px;
+  color: #c678dd;
+}
